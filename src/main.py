@@ -2,8 +2,9 @@ import random
 import string
 
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from typing import Optional
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -17,6 +18,10 @@ class PasswordTooLong(Exception):
 
 class ExcludedAllSets(Exception):
     pass
+
+class PasswordOutput(BaseModel):
+    length: Optional[int] = 10
+    password: str
 
 def gen_password(length: int, exclude: Optional[str] = None) -> str:
     
@@ -89,7 +94,11 @@ async def no_sets_selected(request: Request, exc: ExcludedAllSets):
         }
     )
 
-@app.get("/password")
+@app.get("/")
+async def redirect_to_docs():
+    return RedirectResponse("http://127.0.0.1:8000/docs")
+
+@app.get("/password", response_model=PasswordOutput)
 async def password_endpoint(length: int = 10, exclude: Optional[str] = None):
     if (length < 8):
         raise PasswordNotLongEnough(length)
