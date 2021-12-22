@@ -16,7 +16,7 @@ And finally, install the requirements:
 
 ### Run the API on Uvicorn:
 You can run the API locally using Uvicorn by executing the following command:
-`python3 -m uvicorn gen:app`
+`python3 -m uvicorn main:app`
 
 Now the API can be accessed at `http://127.0.0.1:8000`, however there is no default path so nothing will be returned.
 
